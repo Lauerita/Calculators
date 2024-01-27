@@ -1,8 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-# Attempt to make a double integral 
-
+# Algorithm to calculate double integral using the idea of Riemann Sum 
 
 # rectangle division  
 i = 1000
