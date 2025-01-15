@@ -1,53 +1,52 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Sep 26 16:26:48 2023
-
-@author: xinyihu
-"""
 import numpy as np
-from matplotlib import pyplot as plt
-    
-# Cobweb algorithm 
-# The goal is to investigate the trend of the sequence 
+import matplotlib.pyplot as plt
 
-# Make a function of the function 
+# cobweb plotting 
 
-    
-def g(v):
-    Loan = np.exp(-v)
-    return Loan
+x = np.linspace(-10, 10, 10000)# controlled step sizes
 
-# Make storage for the cobwebs 
-f0 = 1
-nmax = 25 # number of iternation 
+# set up functions 
 
-x = np.zeros(2*nmax) 
-y = np.zeros(2*nmax)
+def func1(x): #orbit function
+    y = (3*x - x**3)/2
+    return(y)
+
+def func2(x): #linear function 
+    y = x
+    return(y)
 
 
-# 3 Starting point 
-# for f0 = 50000, the horizontal value is 50000, and vertical value is 0 
-x[0] = f0
-x[1] = f0
-y[0] = 0
-y[1] = g(f0)
-
-
-for n in range(1, nmax):
-    idx = 2*(n-1)+1 #index of previous yvalue 
-    v = y[idx] #previous values 
-    x[2*n] = v
-    y[2*n] = v
-    print(x[n], y[n])
-    # 
-    x[2*n +1] = v
-    y[2*n +1] = g(v)
-    print(x[n], y[n])
+y1 = func1(x)
+y2 = func2(x)
 
 fig,ax = plt.subplots()
-ax.plot(x,y,marker = "o")
-# Draw lines 
-line1 = np.linspace(0, 6*f0, 500)
-ax.plot(line1, line1, color = "red")
-ax.plot(line1, g(line1), color = "black")
+ax.axhline(y = 0, color = 'black')
+ax.axvline(x = 0, color = 'black')
+ax.set(xlabel = 'x',
+       ylabel = 'y')
+ax.set_xlim(-2,2) #scale of the plot
+ax.set_ylim(-2,2) #scale of the plot
+ax.plot(x, y1)
+ax.plot(x, y2)
+ 
+
+x_val = np.zeros(1000) #set up storage for iterations
+y_val = np.zeros(1000)  
+
+x0 = 1.6 # initial condition
+x_val[0] = x0
+x_val[1] = x_val[0]
+y_val[1] = func1(x_val[1])
+
+
+for i in range(2, len(x_val)):
+    if np.mod(i,2) == 0:
+        y_val[i] = y_val[i-1]
+        x_val[i] = func2(y_val[i])
+    else:
+        x_val[i] = x_val[i-1]
+        y_val[i] = func1(x_val[i])
+
+    
+ax.plot(x_val ,y_val, color = 'green', marker = '.')
+
